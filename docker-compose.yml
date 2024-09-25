@@ -1,0 +1,20 @@
+name: localstack
+services:
+  localstack:
+    container_name: localstack_container
+    image: localstack/localstack-pro
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - LOCALSTACK_AUTH_TOKEN="YOURTOKEN"
+      - DEBUG=${DEBUG:-0}
+      - PERSISTENCE=1
+    volumes:
+      # Utilisez un volume nommé Docker pour la persistance
+      - localstack_data:/var/lib/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+
+volumes:
+  localstack_data:
